@@ -23,7 +23,7 @@ const Documentación = () => {
       }
     return(
         <div>
-            //Diseño usando Tailwindcss e información basica sobre el proyecto
+            
             <div className='  bg-gray-100 py-14'>
                 <h1 className='text-3xl font-bold text-gray-900 flex flex-col items-center'>Librerias usadas para el proyecto</h1>
                 <h2 className='text-xl text-gray-600 flex flex-col items-center'>Librerias de componentes y estilos reutilizables.</h2>
