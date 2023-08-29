@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body  className='py-16'>
         {children}
-      <Navigation/>//Componente de Navegación de las rutas.
+      <Navigation/>
      
       </body>
     </html>
