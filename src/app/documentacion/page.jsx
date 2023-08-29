@@ -1,10 +1,29 @@
-// import { PiFastForwardCircleThin } from 'react-icons/pi';
+'use client'
 
-// PiFastForwardCircleThin
+import React, {useState, useEffect} from 'react'//Funciona para leer y modificat el estado de un componente. Asi como la orientaciòn a objetos del getters y setters.
+import { useHasMounted } from '../../hooks/useHasMounted'//Funciona para el renderizado para que no se muestre el componente hasta que se haya cargado la pagina
+
+
+
 import PagosForms from '../../components/PagosForms';
 const Documentación = () => {
+
+    const hasMounted = useHasMounted();
+
+        /*Se pone la condicion que si no se ha terminado de cargar el contenido de la pagina se mostrará 
+        algun contenido definido mientras se carga la pagina cuando se cargue se mostrará su contenido */
+    if(!hasMounted) {
+        
+        /*Se muestra una animación de carga la cual fue ella a Css puro en el apartado 
+        de styles en el archivo globals.css para que se muestre mientra de carga la pagina.*/
+        return  <div className="loader">
+        <div className="spinner"></div>
+      </div>;
+
+      }
     return(
         <div>
+            //Diseño usando Tailwindcss e información basica sobre el proyecto
             <div className='  bg-gray-100 py-14'>
                 <h1 className='text-3xl font-bold text-gray-900 flex flex-col items-center'>Librerias usadas para el proyecto</h1>
                 <h2 className='text-xl text-gray-600 flex flex-col items-center'>Librerias de componentes y estilos reutilizables.</h2>
@@ -29,6 +48,7 @@ const Documentación = () => {
                 
 
                 </div>
+                {/* //Componente de la Tarjeta de Credito */}
                 <PagosForms/>
                 
                 </div>

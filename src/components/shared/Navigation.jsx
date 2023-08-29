@@ -10,7 +10,7 @@ const Navigation =()=>{
            
              
 
-             
+             //Barra negra de diseño de nombre e imagenes del apartado estetico diseñado usando tailwindcss 
 <nav class="bg-white border-gray-200 dark:bg-gray-900 ">
     <div class="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl px-4 md:px-6 py-2.5">
         <a href="https://www.bbva.es/content/dam/public-web/bbvaes/images/finanzas-vistazo/ef/tarjetas/comparador_aconsejador.png.img.768.1633346204208.png" class="flex items-center">
@@ -28,6 +28,7 @@ const Navigation =()=>{
     <div class="max-w-screen-xl px-4 py-3 mx-auto md:px-6">
         <div class="flex items-center">
             <ul class="flex flex-row mt-0 mr-6 space-x-8 text-sm font-medium">
+                 {/*Estas son las rutas de las paginas a las cuales va a dirigir la barra de navegation los archivos estan en la carpeta src/app nombre de la carpeta del archivo o directorio raiz */}
                 <li>
                     <a href="/" class="text-gray-900  hover:underline" aria-current="page">Home </a>
                  </li>
