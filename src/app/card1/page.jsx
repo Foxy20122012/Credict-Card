@@ -1,14 +1,13 @@
 'use client'
-import '../styles/globals.css'
 
-// import Card from '../components/card'
+import PagosForms from "../../components/PagosForms";
 import React, {useState, useEffect} from 'react'
-import { useHasMounted } from '../hooks/useHasMounted'
-import PagosForms from '@/components/PagosForms'
+import { useHasMounted } from '../../hooks/useHasMounted'
 
-const Home =()=>{
+const card2 = () => {
 
-    const backgroundImageUrl = 'https://thefoodtech.com/wp-content/uploads/2020/10/pagos-pandemia.jpg';
+    const backgroundImageUrl = 'https://d500.epimg.net/cincodias/imagenes/2023/04/25/pyme/1682444042_108927_1683027948_noticia_normal.jpg';
+
 
     const hasMounted = useHasMounted();
     if(!hasMounted) {
@@ -24,5 +23,6 @@ const Home =()=>{
             <PagosForms backgroundImageUrl={backgroundImageUrl}/>
         </div>
     )
-} 
-export default Home; 
+    };  
+
+export default card2;
