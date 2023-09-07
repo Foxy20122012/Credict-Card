@@ -15,13 +15,96 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
         cvc: '',//Codigo de seguridad de la tarjeta de credito
         focus: '',//Es el foco de la tarjeta de credito para gestionar el enfoque de los campor de la tarjeta de credito.
     });
+    
+    const [errors, setErrors] = useState({
+        number: '',
+        name: '',
+        expiry: '',
+        cvc: '',
+      });
 
-    const handleInputChange = (e) => {//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito
-        setState({//Es el estado de la tarjeta de credito
-            ...state,//Los Hooks siempre que se hace un setState siempre borra el estado anterior por eso se le dice que se mantenga los valores que ya se tenian
-            [e.target.name]: e.target.value//Es el valor que se le asigna al estado de la tarjeta de credito
+
+    // const handleInputChange = (e) => {//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito
+    //     setState({//Es el estado de la tarjeta de credito
+    //         ...state,//Los Hooks siempre que se hace un setState siempre borra el estado anterior por eso se le dice que se mantenga los valores que ya se tenian
+    //         [e.target.name]: e.target.value//Es el valor que se le asigna al estado de la tarjeta de credito
+    //     });
+    // }
+
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+    
+        setState({
+          ...state,
+          [name]: value,
         });
-    }
+    
+        // Validar campos y establecer mensajes de error
+        if (name === 'number') {
+          if (value.length !== 16) {
+            setErrors({
+              ...errors,
+              [name]: 'El número debe tener 16 dígitos',
+            });
+          } else {
+            setErrors({
+              ...errors,
+              [name]: '',
+            });
+          }
+        } else if (name === 'name') {
+          if (value.trim() === '') {
+            setErrors({
+              ...errors,
+              [name]: 'Campo obligatorio',
+            });
+          } else {
+            setErrors({
+              ...errors,
+              [name]: '',
+            });
+          }
+        } else if (name === 'expiry') {
+          if (value.length !== 4) {
+            setErrors({
+              ...errors,
+              [name]: 'Formato válido: MM/YY',
+            });
+          } else {
+            setErrors({
+              ...errors,
+              [name]: '',
+            });
+          }
+        } else if (name === 'cvc') {
+          if (value.length !== 3) {
+            setErrors({
+              ...errors,
+              [name]: 'El CVC debe tener 3 dígitos',
+            });
+          } else {
+            setErrors({
+              ...errors,
+              [name]: '',
+            });
+          }
+        }
+      }
+    
+      const handleBlur = (e) => {
+        const { name, value } = e.target;
+    
+        // Verificar si el campo está vacío
+        if (value.trim() === '') {
+          setErrors({
+            ...errors,
+            [name]: 'Campo Requerido',
+          });
+        }
+      }
+    
+     
 
     const handleFocusChange = (e) => {//Es la funcion que se encarga de cambiar el estado del foco de la tarjeta de credito
         setState({//Es el estado de la tarjeta de credito
@@ -30,16 +113,24 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
         })
     }
 
-    const pagos = () => {//Es la funcion que se encarga de mostrar los datos de la tarjeta de credito por medio de consola y comprobar que si se captura y se mandar a consola.
-        console.log("number => ",state.number)
-        console.log("name => ",state.name)
-        console.log("expiry => ",state.expiry)
-        console.log("cvc => ",state.cvc)
-        //Imprime en consola en formato JSON el estado de la tarjeta de credito.
-        console.log(JSON.stringify(state))
-    }
+    const pagos = () => {
+        // Verificar si hay errores en los campos
+        const hasErrors = Object.values(errors).some((error) => error !== '');
+    
+        if (hasErrors) {
+          alert('Por favor, corrija los errores antes de continuar.');
+        } else {
+          // Realizar el pago
+          
+          console.log(JSON.stringify(state));
+        }
+      }
 
-
+    const camposLlenos = Object.values(state).every(value => value !== '');       
+    
+    
+    
+    
     return (
         <div
             className='flex justify-center items-center h-screen bg-cover bg-center'//Es el estilo del contenedor de la tarjeta de credito
@@ -67,6 +158,7 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                         name='name'//Es el nombre del campo de nombre de la tarjeta de credito.
                         id='name'//Es el id del campo de nombre de la tarjeta de credito. el cual debe coincidir con el nombre del campo del hook.
                         placeholder='Nombre'
+                        onBlur={handleBlur}
                         onChange={handleInputChange}//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito.
                         onFocus={handleFocusChange}//Es la funcion que se encarga de cambiar el estado del foco de la tarjeta de credito
                         onInput={(e) => {//Es la funcion que se encarga de limitar el numero de caracteres que se pueden ingresar en el campo de nombre de la tarjeta de credito.
@@ -75,6 +167,8 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                             }
                         }}
                     />
+                    
+                    <p className='text-red-500 text-sm'>{errors.name}</p>
 
             <label htmlFor='number' className='py-2'>Numero de Tarjeta  </label>
             <input className='w-full h-10 px-2 mb-4  text-sm text-gray-700 placeholder-gray-500 border rounded-lg focus:shadow-outline'
@@ -82,6 +176,7 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                 name='number'//Es el nombre del campo de numero de la tarjeta de credito.
                 id='number'//Es el id del campo de numero de la tarjeta de credito. el cual debe coincidir con el nombre del campo del hook.
                 placeholder='Numero de tarjeta'
+                onBlur={handleBlur}
                 onChange={handleInputChange}//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito.
                 onFocus={handleFocusChange}//Es la funcion que se encarga de cambiar el estado del foco de la tarjeta de credito
                 onInput={(e) => {//Es la funcion que se encarga de limitar el numero de caracteres que se pueden ingresar en el campo de numero de la tarjeta de credito.
@@ -91,14 +186,17 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                 }}
 
             />
+            <p className='text-red-500 text-sm'>{errors.number}</p>
+            
             <div className='grid grid-cols-2 gap-4'>
                 <div>
             <label htmlFor='expiry' className='py-2'>Expiracion</label>
             <input className='w-full h-10 px-2 mb-4 text-sm text-gray-700 placeholder-gray-500 border rounded-lg focus:shadow-outline'
-                type='number'//El input es de tipo numero para que no se puedan ingresar letras en el campo de fecha de expiracion de la tarjeta de credito.
+                type='Number'//El input es de tipo numero para que no se puedan ingresar letras en el campo de fecha de expiracion de la tarjeta de credito.
                 name='expiry'//Es el nombre del campo de fecha de expiracion de la tarjeta de credito.
                 id='expiry'//Es el id del campo de fecha de expiracion de la tarjeta de credito. el cual debe coincidir con el nombre del campo del hook.
                 placeholder='Fecha de expiracion'
+                onBlur={handleBlur}
                 onChange={handleInputChange}//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito.
                 onFocus={handleFocusChange}//Es la funcion que se encarga de cambiar el estado del foco de la tarjeta de credito
                 onInput={(e) => {//Es la funcion que se encarga de limitar el numero de caracteres que se pueden ingresar en el campo de fecha de expiracion de la tarjeta de credito.
@@ -107,6 +205,8 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                     }
                 }}
             />  
+            
+            <p className='text-red-500 text-sm'>{errors.expiry}</p>
                 </div>
             <div className=''>
             <label htmlFor='cvc' className='py-2'>CVC</label>
@@ -115,20 +215,24 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                 name='cvc'//Es el nombre del campo de cvc de la tarjeta de credito.
                 id='cvc'//Es el id del campo de cvc de la tarjeta de credito.
                 placeholder='cvc'
+                onBlur={handleBlur}
+
                 onChange={handleInputChange}//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito.
                 onFocus={handleFocusChange}//Es la funcion que se encarga de cambiar el estado del foco de la tarjeta de credito
                 onInput={(e) => {//Es la funcion que se encarga de limitar el numero de caracteres que se pueden ingresar en el campo de cvc de la tarjeta de credito.
-                    if (e.target.value.length > 4) {
-                        e.target.value = e.target.value.slice(0, 4);
+                    if (e.target.value.length > 3) {
+                        e.target.value = e.target.value.slice(0, 3);
                     }
                 }}
             />
+            <p className='text-red-500 text-sm'>{errors.cvc}</p>
             </div>
             </div>
             
             {/*Se crea el boton de pagar el cual se encarga de mandar a llamar la funcion de pagos la cual se encarga de mostrar los datos de la tarjeta de credito por medio de consola y comprobar que si se captura y se mandar a consola.*/}
                     <button className='rounded-xl border border-black py-2 font-bold '
                         onClick={pagos}
+                        disabled={!camposLlenos}  
                         type='submit'>
                         Pagar 
                     </button>
