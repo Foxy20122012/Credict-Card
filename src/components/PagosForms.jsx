@@ -21,6 +21,42 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
         cvc: '',
       });
 
+      const [cardNumber, setCardNumber] = useState('');
+
+      const handleCardNumberChange = (e) => {
+        const { value } = e.target;
+      
+        // Eliminar todos los caracteres no numéricos del valor ingresado
+        const formattedValue = value.replace(/\D/g, '');
+      
+        // Validar que el valor tenga al menos 16 dígitos
+        if (formattedValue.length < 16) {
+          setErrors({
+            ...errors,
+            number: 'El número debe tener al menos 16 dígitos',
+          });
+        } else {
+          setErrors({
+            ...errors,
+            number: '',
+          });
+        }
+      
+        // Formatear el valor agregando espacios cada cuatro dígitos
+        const formattedNumber = formattedValue
+          .replace(/(\d{4})/g, '$1 ')
+          .trim();
+      
+        setCardNumber(formattedNumber);
+      
+        // Actualizar el estado de la tarjeta con el número formateado
+        setState({
+          ...state,
+          number: formattedValue, // Actualizar el estado de la tarjeta con el número sin espacios
+        });
+      };
+      
+      
     // const handleInputChange = (e) => {//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito
     //     setState({//Es el estado de la tarjeta de credito
     //         ...state,//Los Hooks siempre que se hace un setState siempre borra el estado anterior por eso se le dice que se mantenga los valores que ya se tenian
@@ -218,16 +254,18 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
 
             <label htmlFor='number' className='py-2'>Numero de Tarjeta  </label>
             <input className='w-full h-10 px-2 mb-4  text-sm text-gray-700 placeholder-gray-500 border rounded-lg focus:shadow-outline'
-                type='number'//El input es de tipo numero para que no se puedan ingresar letras en el campo de numero de la tarjeta de credito.
+                type='text'//La razón porque el input es de tipo text es porque se uso un formateador para que se pasaran sus datos a numero y no permitiera ingresar texto y asi poder manipular sus datos y poder aplicar un espacio cada 4 numeros.
                 name='number'//Es el nombre del campo de numero de la tarjeta de credito.
                 id='number'//Es el id del campo de numero de la tarjeta de credito. el cual debe coincidir con el nombre del campo del hook.
                 placeholder='Numero de tarjeta'
                 onBlur={handleBlur}
-                onChange={handleInputChange}//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito.
+                // onChange={handleInputChange}//Es la funcion que se encarga de cambiar el estado de la tarjeta de credito.
+                onChange={handleCardNumberChange}
+                value={cardNumber}
                 onFocus={handleFocusChange}//Es la funcion que se encarga de cambiar el estado del foco de la tarjeta de credito
                 onInput={(e) => {//Es la funcion que se encarga de limitar el numero de caracteres que se pueden ingresar en el campo de numero de la tarjeta de credito.
-                    if (e.target.value.length > 16) {
-                        e.target.value = e.target.value.slice(0, 16);
+                    if (e.target.value.length > 19) {
+                        e.target.value = e.target.value.slice(0, 19);
                     }
                 }}
 
@@ -238,7 +276,7 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                 <div>
             <label htmlFor='expiry' className='py-2'>Expiracion</label>
             <input className='w-full h-10 px-2 mb-4 text-sm text-gray-700 placeholder-gray-500 border rounded-lg focus:shadow-outline'
-                type='text'//El input es de tipo numero para que no se puedan ingresar letras en el campo de fecha de expiracion de la tarjeta de credito.
+                type='text'//La razón porque el input es de tipo text es porque se uso un formateador para que se pasaran sus datos a numero y no permitiera ingresar texto y asi poder manipular sus datos y poder aplicar un una barra diagonal cada dos digitos para darle un formato y poder separarlo en formato.
                 name='expiry'//Es el nombre del campo de fecha de expiracion de la tarjeta de credito.
                 id='expiry'//Es el id del campo de fecha de expiracion de la tarjeta de credito. el cual debe coincidir con el nombre del campo del hook.
                 placeholder='Fecha de expiracion'
@@ -281,7 +319,7 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
             {/*Se crea el boton de pagar el cual se encarga de mandar a llamar la funcion de pagos la cual se encarga de mostrar los datos de la tarjeta de credito por medio de consola y comprobar que si se captura y se mandar a consola.*/}
                     <button className='rounded-xl border border-black py-2 font-bold '
                         onClick={pagos}
-                        disabled={!camposLlenos}  
+                        disabled={!camposLlenos || Object.values(errors).some(error => error !== '')}  
                         type='submit'>
                         Pagar 
                     </button>
@@ -292,3 +330,4 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
 }
 
 export default PaymentForm;
+
