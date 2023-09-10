@@ -14,14 +14,14 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
         focus: '',//Es el foco de la tarjeta de credito para gestionar el enfoque de los campor de la tarjeta de credito.
     });
     
-    const [errors, setErrors] = useState({
-        number: '',
-        name: '',
-        expiry: '',
-        cvc: '',
+    const [errors, setErrors] = useState({//Es el estado de los errores de la tarjeta de credito
+        number: '',//Numero de la tarjeta de credito
+        name: '',//Nombre del titular de la tarjeta de credito
+        expiry: '',//Fecha de expiracion de la tarjeta de credito
+        cvc: '',//Codigo de seguridad de la tarjeta de credito
       });
 
-      const [cardNumber, setCardNumber] = useState('');
+      const [cardNumber, setCardNumber] = useState('');//Es el estado del numero de la tarjeta de credito
 
       const handleCardNumberChange = (e) => {
         const { value } = e.target;
@@ -43,7 +43,7 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
         }
       
         // Formatear el valor agregando espacios cada cuatro dígitos
-        const formattedNumber = formattedValue
+        const formattedNumber = formattedValue//Es la funcion que se encarga de darle formato al numero de la tarjeta de credito. 
           .replace(/(\d{4})/g, '$1 ')
           .trim();
       
@@ -65,64 +65,40 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
     // }
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+      const { name, value } = e.target;
     
-        setState({
-          ...state,
-          [name]: value,
-        });
+      // Inicialmente, establecemos el campo como válido (sin error)
+      let fieldError = '';
     
-        // Validar campos y establecer mensajes de error
-        if (name === 'number') {
-          if (value.length !== 16) {
-            setErrors({
-              ...errors,
-              [name]: 'El número debe tener 16 dígitos',
-            });
-          } else {
-            setErrors({
-              ...errors,
-              [name]: '',
-            });
-          }
-        } else if (name === 'name') {
-          if (value.trim() === '') {
-            setErrors({
-              ...errors,
-              [name]: 'Campo obligatorio',
-            });
-          } else {
-            setErrors({
-              ...errors,
-              [name]: '',
-            });
-          }
-        } else if (name === 'expiry') {
-          if (value.length !== 4) {
-            setErrors({
-              ...errors,
-              [name]: 'Formato válido: MM/YY',
-            });
-          } else {
-            setErrors({
-              ...errors,
-              [name]: '',
-            });
-          }
-        } else if (name === 'cvc') {
-          if (value.length !== 3) {
-            setErrors({
-              ...errors,
-              [name]: 'El CVC debe tener 3 dígitos',
-            });
-          } else {
-            setErrors({
-              ...errors,
-              [name]: '',
-            });
-          }
+      if (name === 'name') {
+        if (value.trim() === '') {
+          fieldError = 'Campo obligatorio';
+        } else if (!/^[a-zA-Z\s]+$/.test(value)) {
+          fieldError = 'Solo se permiten letras en este campo';
         }
+      } else if (name === 'number' && value.length !== 16) {
+        fieldError = 'El número debe tener 16 dígitos';
+      } else if (name === 'expiry' && value.length !== 4) {
+        fieldError = 'Formato válido: MM/YY';
+      } else if (name === 'cvc' && value.length !== 3) {
+        fieldError = 'El CVC debe tener 3 dígitos';
       }
+    
+      // Actualizamos el estado del campo y los errores
+      setState({
+        ...state,
+        [name]: value,
+      });
+    
+      setErrors({
+        ...errors,
+        [name]: fieldError,
+      });
+    };
+    
+    
+    
+    
     
       const handleBlur = (e) => {
         const { name, value } = e.target;
@@ -235,7 +211,7 @@ const PaymentForm = ({ backgroundImageUrl }) => {//El componente se llama asi de
                 {/*Se procede a crear el formulario para ingresar los datos en los campos de la tarjeta de credito.*/}
                 <form className='flex flex-col'>
                 <label htmlFor='name' className='py-2'>Nombre</label>
-                    <input className='input-style'
+                    <input className='uppercase w-full h-10 px-2 mb-4  text-sm text-gray-700 placeholder-gray-500 border rounded-lg focus:shadow-outline'
                         type='text'//El input es de tipo texto para que se puedan ingresar letras en el campo de nombre de la tarjeta de credito.
                         name='name'//Es el nombre del campo de nombre de la tarjeta de credito.
                         id='name'//Es el id del campo de nombre de la tarjeta de credito. el cual debe coincidir con el nombre del campo del hook.
